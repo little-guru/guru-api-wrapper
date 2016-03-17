@@ -1,0 +1,9 @@
+{
+  "name" : "little-guru/guru-api-wrapper",
+  "autoload" : {
+      "psr-4" : {
+        "LittleGuru\\Guru" : "src/"
+      }
+
+  }
+}
