@@ -4,7 +4,7 @@
 
 Add the following to your composer.json file
 
-'''
+```
 
 {
     "repositories": [
@@ -19,5 +19,5 @@ Add the following to your composer.json file
     }
 }
 
-'''
+```
 
