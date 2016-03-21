@@ -1,5 +1,6 @@
 {
   "name" : "little-guru/guru-api-wrapper",
+  "version" : "0.1",
   "autoload" : {
       "psr-4" : {
         "LittleGuru\\Guru" : "src/"
