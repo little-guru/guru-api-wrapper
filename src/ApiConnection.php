@@ -15,11 +15,14 @@ class ApiConnection
 
     protected $lastError;
 
-    public function __construct( $token)
+    protected $baseUrl;
+
+    public function __construct($url, $token)
     {
 
        $this->token = $token;
 
+        $this->baseUrl = $url;
 
 
     }
@@ -29,8 +32,7 @@ class ApiConnection
 
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, $this->url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, 'Authorization: '. $this->token);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: '. $this->token]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 
@@ -38,17 +40,22 @@ class ApiConnection
 
     }
 
-    public function get($url, array $params)
+    public function get($url, $params = array())
     {
 
         $ch = $this->connection();
 
         if ($params)
         {
-            $url = $url . '?' . $this->prepareQuery($params);
+            $url = $this->baseUrl . $url . '?' . $this->prepareQuery($params);
 
-            curl_setopt($ch, CURLOPT_URL, $url);
+
+        }else {
+
+            $url = $this->baseUrl . $url;
         }
+
+        curl_setopt($ch, CURLOPT_URL, $url);
 
 
         $result = curl_exec($ch);
