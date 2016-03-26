@@ -41,10 +41,17 @@ class Guru
 
     }
 
-    public function get($endpoint)
+    public function get($endpoint, $params = array())
     {
 
-        return $this->apiConnection->get($endpoint);
+        return $this->apiConnection->get($endpoint, $params = array());
+
+    }
+
+    public function post($endpoint, $params = array())
+    {
+
+        return $this->apiConnection->post($endpoint, $params);
 
     }
 

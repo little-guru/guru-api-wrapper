@@ -60,7 +60,36 @@ class ApiConnection
 
         $result = curl_exec($ch);
 
+        curl_close($ch);
+
         return $result;
+
+    }
+
+
+    public function post($url, $params = array())
+    {
+
+
+        $ch = $this->connection();
+
+        curl_setopt($ch, CURLOPT_POST, 1);
+
+        if($params)
+        {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        }
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1 );
+
+        curl_setopt($ch, CURLOPT_URL, $this->baseUrl . $url);
+
+        $result = curl_exec($ch);
+
+        curl_close($ch);
+
+        return $result;
+
 
     }
 
