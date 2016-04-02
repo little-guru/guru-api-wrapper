@@ -45,6 +45,7 @@ class ApiConnection
 
         $ch = $this->connection();
 
+
         if ($params)
         {
             $url = $this->baseUrl . $url . '?' . $this->prepareQuery($params);
@@ -55,16 +56,20 @@ class ApiConnection
             $url = $this->baseUrl . $url;
         }
 
+
         curl_setopt($ch, CURLOPT_URL, $url);
 
 
         $result = curl_exec($ch);
 
+        $httpCode = curl_getinfo ( $ch, CURLINFO_HTTP_CODE );
+
         curl_close($ch);
 
-        return $result;
+        return $this->prepareResponse($result, $httpCode);
 
     }
+
 
 
     public function post($url, $params = array())
@@ -86,9 +91,11 @@ class ApiConnection
 
         $result = curl_exec($ch);
 
+        $httpCode = curl_getinfo ( $ch, CURLINFO_HTTP_CODE );
+
         curl_close($ch);
 
-        return $result;
+        return $this->prepareResponse($result, $httpCode);
 
 
     }
@@ -96,6 +103,29 @@ class ApiConnection
     private function prepareQuery(array $params){
 
         return http_build_query($params);
+
+    }
+
+    private function prepareResponse($jsonString, $httpStatus)
+    {
+
+        $obj = json_decode($jsonString);
+
+
+        if(!$obj)
+        {
+            return new GuruResponse(null, null, $httpStatus, null, ['Error connecting to the api'], null, null);
+        }
+
+        $pagination = null;
+
+        if(isset($obj->pagination))
+        {
+            $pagination = $obj->pagination;
+        }
+
+
+        return new GuruResponse($obj->description, $obj->message, $httpStatus, $obj->code, $obj->errors,  $obj->data, $pagination);
 
     }
 

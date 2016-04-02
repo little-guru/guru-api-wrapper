@@ -44,7 +44,7 @@ class Guru
     public function get($endpoint, $params = array())
     {
 
-        return $this->apiConnection->get($endpoint, $params = array());
+        return $this->apiConnection->get($endpoint, $params);
 
     }
 
@@ -54,6 +54,8 @@ class Guru
         return $this->apiConnection->post($endpoint, $params);
 
     }
+
+
 
 
 
