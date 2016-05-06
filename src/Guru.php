@@ -5,55 +5,59 @@ namespace LittleGuru\Guru;
 
 class Guru
 {
-    protected $token;
 
-    protected $publicKey;
 
-    protected $privateKey;
-
-    protected $apiConnection;
-
-    protected $url;
-
-    /**
-     * Guru constructor.
-     * @param $privateKey
-     * @param $publicKey
-     * @param $url
-     */
-    public function __construct($publicKey, $privateKey,  $url)
+    public static function withKeys($url, $publicKey, $privateKey)
     {
-        $this->privateKey = $privateKey;
-        $this->publicKey = $publicKey;
-        $this->url = $url;
-        $this->token = new ApiToken($this->publicKey, $this->privateKey);
-        $this->apiConnection = $this->getConnection();
-
+        $token = new ApiToken($this->publicKey, $this->privateKey);
+        
+         return new ApiConnection($turl, $token->getToken(), 'Token');
+    }
+    
+    public static function withUserToken($url, $userToken)
+    {
+    
+        return new ApiConnection($turl, $JWTUserToken, 'User');
 
     }
-
-    private function getConnection()
+    
+    public static function getUserToken($url, $endpoint, $email, $password)
     {
-
-
-
-        return new ApiConnection($this->url, $this->token->getToken());
-
+        $connection = new ApiConnection($url, null, null);
+        
+        $resposne = $connection->post($endpoint, ['email' => $email, 'password' => $password]);
+        
+        return $resposne;
+        
+    }
+    
+    public static function decodeUserToken($token)
+    {
+        $parts = explode($token);
+        
+        if(count($parts) < 3)
+        {
+            return null;
+        }
+        
+        $baseDecoded = base64_decode($parts[1]);
+        
+        if(!$baseDecoded)
+        {
+            return null;
+        }
+        
+        $json = json_decode($baseDecoded);
+        
+        if(!$json)
+        {
+            return null;
+        }
+        
+        return $json;
+        
     }
 
-    public function get($endpoint, $params = array())
-    {
-
-        return $this->apiConnection->get($endpoint, $params);
-
-    }
-
-    public function post($endpoint, $params = array())
-    {
-
-        return $this->apiConnection->post($endpoint, $params);
-
-    }
 
 
 

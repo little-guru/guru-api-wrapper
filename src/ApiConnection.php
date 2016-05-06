@@ -16,15 +16,28 @@ class ApiConnection
     protected $lastError;
 
     protected $baseUrl;
+    
+    protected $tokenType;
+    
+    protected $accountId;
 
-    public function __construct($url, $token)
+    public function __construct($url, $token, $tokenType)
     {
 
        $this->token = $token;
 
         $this->baseUrl = $url;
+        
+        $this->tokenType = $tokenType;
+        
+        $this->accountId = null;
 
 
+    }
+    
+    public function setAccountId($accountId)
+    {
+        $this->accountId = $accountId;
     }
 
     private function connection()
@@ -32,7 +45,14 @@ class ApiConnection
 
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: '. $this->token]);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: '. $this->tokenType . ' ' . $this->token]);
+        
+        if($this->accountId)
+        {
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['GuruAccountId: '. $this->accountId]);
+
+        }
+        
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 
