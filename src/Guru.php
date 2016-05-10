@@ -11,7 +11,7 @@ class Guru
     {
         $token = new ApiToken($publicKey, $privateKey);
         
-         return new ApiConnection($turl, $token->getToken(), 'Token');
+         return new ApiConnection($url, $token->getToken(), 'Token');
     }
     
     public static function withUserToken($url, $userToken)
