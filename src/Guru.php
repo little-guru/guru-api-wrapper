@@ -9,7 +9,7 @@ class Guru
 
     public static function withKeys($url, $publicKey, $privateKey)
     {
-        $token = new ApiToken($this->publicKey, $this->privateKey);
+        $token = new ApiToken($publicKey, $privateKey);
         
          return new ApiConnection($turl, $token->getToken(), 'Token');
     }
