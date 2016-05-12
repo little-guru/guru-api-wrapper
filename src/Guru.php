@@ -17,13 +17,14 @@ class Guru
     public static function withUserToken($url, $userToken)
     {
     
-        return new ApiConnection($url, $userToken, 'User');
+        return new ApiConnection($url, $use, 'User');
 
     }
     
     public static function getUserToken($url, $endpoint, $email, $password)
     {
         $connection = new ApiConnection($url, null, null);
+        
         $resposne = $connection->post($endpoint, ['email' => $email, 'password' => $password]);
         
         return $resposne;
