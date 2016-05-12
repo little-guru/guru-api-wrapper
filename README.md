@@ -45,7 +45,7 @@ $response = $guru->get($endpoint, $params);
 Secondly with a uer JSON Web Token (JWT). Use Guru::getUserToken() to authenticate the user and recive the token.
 
 ```
-$url = 'http:://platform.mylittleguru.co.uk/api/v1/';
+$url = 'http://platform.mylittleguru.co.uk/api/v1/';
 $email = 'bob@bob.com';
 $password = '123456';
 $endpoint = 'users/auth';
