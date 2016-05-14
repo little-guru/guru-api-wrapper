@@ -45,14 +45,19 @@ class ApiConnection
 
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: '. $this->tokenType . ' ' . $this->token]);
-        
-        if($this->accountId)
-        {
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['GuruAccountId: '. $this->accountId]);
+        $headers = ['Authorization: '. $this->tokenType . ' ' . $this->token];
 
+        if(strtolower($this->tokenType) == 'user' && !$this->accountId)
+        {
+            throw new \Exception('Account ID not set', 400);
         }
-        
+
+        $headers[] = 'GuruAccountId: '. $this->accountId;
+
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 

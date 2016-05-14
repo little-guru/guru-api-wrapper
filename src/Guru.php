@@ -17,7 +17,7 @@ class Guru
     public static function withUserToken($url, $userToken)
     {
     
-        return new ApiConnection($url, $use, 'User');
+        return new ApiConnection($url, $userToken, 'User');
 
     }
     
@@ -25,15 +25,15 @@ class Guru
     {
         $connection = new ApiConnection($url, null, null);
         
-        $resposne = $connection->post($endpoint, ['email' => $email, 'password' => $password]);
+        $response = $connection->post($endpoint, ['email' => $email, 'password' => $password]);
         
-        return $resposne;
+        return $response;
         
     }
     
     public static function decodeUserToken($token)
     {
-        $parts = explode($token);
+        $parts = explode('.', $token);
         
         if(count($parts) < 3)
         {
