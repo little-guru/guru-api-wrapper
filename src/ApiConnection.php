@@ -107,7 +107,7 @@ class ApiConnection
 
         if($params)
         {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->prepareQuery($params));
         }
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1 );
