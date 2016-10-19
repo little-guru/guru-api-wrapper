@@ -16,36 +16,38 @@ class ApiConnection
     protected $lastError;
 
     protected $baseUrl;
-    
+
     protected $tokenType;
-    
+
     protected $accountId;
 
     public function __construct($url, $token, $tokenType)
     {
 
-       $this->token = $token;
+        $this->token = $token;
 
         $this->baseUrl = $url;
-        
+
         $this->tokenType = $tokenType;
-        
+
         $this->accountId = null;
 
 
     }
-    
+
     public function setAccountId($accountId)
     {
         $this->accountId = $accountId;
     }
 
-    private function connection()
+    private function connection($additionalHeaders = array())
     {
 
         $ch = curl_init();
 
         $headers = ['Authorization: '. $this->tokenType . ' ' . $this->token];
+
+        $headers = array_merge($headers, $additionalHeaders);
 
         if(strtolower($this->tokenType) == 'user' && !$this->accountId)
         {
@@ -125,6 +127,39 @@ class ApiConnection
 
     }
 
+    public function simpleFileUpload($url, $file, $mimeType, $params)
+    {
+
+        $ch = $this->connection(['Content-type : ' . $mimeType]);
+
+        curl_setopt($ch, CURLOPT_POST, 1);
+
+        if ($params)
+        {
+            $url = $this->baseUrl . $url . '?' . $this->prepareQuery($params);
+
+
+        }else {
+
+            $url = $this->baseUrl . $url;
+        }
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $file);
+
+        curl_setopt($ch, CURLOPT_URL,  $url);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1 );
+
+        $result = curl_exec($ch);
+
+        $httpCode = curl_getinfo ( $ch, CURLINFO_HTTP_CODE );
+
+        curl_close($ch);
+
+        return $this->prepareResponse($result, $httpCode);
+
+    }
+
     private function prepareQuery(array $params){
 
         return http_build_query($params);
@@ -133,7 +168,6 @@ class ApiConnection
 
     private function prepareResponse($jsonString, $httpStatus)
     {
-
         $obj = json_decode($jsonString);
 
 
