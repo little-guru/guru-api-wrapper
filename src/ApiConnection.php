@@ -44,7 +44,6 @@ class ApiConnection
     {
 
         $ch = curl_init();
-
         $headers = ['Authorization: '. $this->tokenType . ' ' . $this->token];
 
         $headers = array_merge($headers, $additionalHeaders);
@@ -130,7 +129,7 @@ class ApiConnection
     public function simpleFileUpload($url, $file, $mimeType, $params)
     {
 
-        $ch = $this->connection(['Content-type : ' . $mimeType]);
+        $ch = $this->connection(['guru-file-type : ' . $mimeType]);
 
         curl_setopt($ch, CURLOPT_POST, 1);
 
@@ -151,6 +150,7 @@ class ApiConnection
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1 );
 
         $result = curl_exec($ch);
+
 
         $httpCode = curl_getinfo ( $ch, CURLINFO_HTTP_CODE );
 
