@@ -129,7 +129,7 @@ class ApiConnection
     public function simpleFileUpload($url, $file, $mimeType, $params)
     {
 
-        $ch = $this->connection(['guru-file-type : ' . $mimeType]);
+        $ch = $this->connection(['guru-file-type: ' . $mimeType]);
 
         curl_setopt($ch, CURLOPT_POST, 1);
 
@@ -190,6 +190,7 @@ class ApiConnection
 
     private function handleErrors()
     {
+
 
     }
 
